@@ -1,0 +1,32 @@
+{
+  "name": "www",
+  "authors": [
+    "Sumit Kumar Maitra <sumitkm@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "knockout": "^3.4.0",
+    "js-signals": "^1.0.0",
+    "crossroads": "^0.12.2",
+    "requirejs": "^2.2.0",
+    "text": "^2.0.15",
+    "history.js": "history#^1.8.0",
+    "gnb": "^0.1.5",
+    "rsvp.js": "rsvp#^3.2.1",
+    "r.js": "^2.3.2",
+    "amplify": "^1.1.2"
+  }
+}

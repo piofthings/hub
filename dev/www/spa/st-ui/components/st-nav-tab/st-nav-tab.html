@@ -1,0 +1,8 @@
+<div class="tab horiz" data-bind="foreach: tabStrip().tabItems">
+    <div class="tab-nav" data-bind="css: active() ? css() + ' selected' : css()">
+        <a data-bind="attr : { 'data-spa-a': isSpa(), href: href }">
+            <!-- ko text: text -->
+            <!-- /ko -->
+        </a>
+    </div>
+</div>

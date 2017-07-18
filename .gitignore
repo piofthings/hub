@@ -4,6 +4,8 @@ dev/**/*.map
 node_modules/
 libs/
 
+webconfig.json
+
 # Logs
 logs
 *.log

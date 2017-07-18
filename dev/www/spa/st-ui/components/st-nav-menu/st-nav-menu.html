@@ -1,0 +1,63 @@
+<header class="fixed-top" data-bind="attr: { id: id }">
+    <nav class="desktop nav">
+        <ul data-bind="foreach: leftMenuItems">
+            <li data-bind="css: css, visible: isVisible">
+                <!-- ko if: href()!=='' -->
+                <a data-bind="{ attr: { href: href }, html: text, css: hrefCss }"></a>
+                <!-- /ko -->
+                <!-- ko ifnot: href()!=='' -->
+                <span data-bind="{ html: text, css: hrefCss }"></span>
+                <!-- /ko -->
+            </li>
+        </ul>
+        <ul data-bind="foreach: rightMenuItems" class="nav-header" style="float: right">
+            <li data-bind="css: css, visible: isVisible">
+                <!-- ko if: href()!=='' -->
+                <a data-bind="{ attr: { href: href }, html: text, css: hrefCss }"></a>
+                <!-- /ko -->
+                <!-- ko ifnot: href()!=='' -->
+                <span data-bind="{ html: text, css: hrefCss }"></span>
+                <!-- /ko -->
+            </li>
+        </ul>
+    </nav>
+    <nav class="mobile nav">
+        <div class="nav-header">
+            <a class="nav-menu-button">
+                <i class="fa fa-home" aria-hidden="true"></i>
+            </a>
+            <button class="nav-menu-button pull-right">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+                <ul class="dropdown">
+                    <!-- ko foreach: leftMenuItems -->
+
+                    <li data-bind="css: css, visible: isVisible">
+                        <!-- ko if: href()!=='' -->
+                        <a data-bind="{ attr: { href: href }, html: text, css: hrefCss }"></a>
+                        <!-- /ko -->
+                        <!-- ko ifnot: href()!=='' -->
+                        <span data-bind="{ html: text, css: hrefCss }"></span>
+                        <!-- /ko -->
+                    </li>
+                    <!-- /ko -->
+                    <!-- ko foreach: rightMenuItems -->
+                    <li data-bind="css: css">
+                        <!-- ko if: href()!=='' -->
+                        <a data-bind="{ attr: { href: href }, html: text, css: hrefCss }"></a>
+                        <!-- /ko -->
+                        <!-- ko ifnot: href()!=='' -->
+                        <span data-bind="{ html: text, css: hrefCss }"></span>
+                        <!-- /ko -->
+                    </li>
+                    <!-- /ko -->
+                    <!-- <li class="nav-menu-item">
+                        Projects
+                    </li>
+                    <li class="nav-menu-item">
+                        Blogs
+                    </li> -->
+                </ul>
+            </button>
+        </div>
+    </nav>
+</header>

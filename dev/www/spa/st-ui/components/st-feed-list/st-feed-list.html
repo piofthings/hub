@@ -1,0 +1,45 @@
+<div class="container">
+    <!-- ko foreach: recents -->
+    <div class="row">
+        <div class="col-sm-8 border-primary all rounded" >
+            <div class=" element-padding">
+                <div style="float: right; cursor: pointer; color: silver" data-bind="click: $component.deleteClick">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </div>
+                <!-- ko if: title != null -->
+                <div data-bind="text: title"></div>
+                <!-- /ko -->
+                <span data-bind="text: body"></span>
+            </div>
+        </div>
+    </div>
+    <!-- ko if: $index() < $component.recents().length-1 -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="tl-separator">
+            </div>
+        </div>
+    </div>
+    <!-- /ko -->
+    <!-- /ko -->
+    <!-- ko foreach: past -->
+    <div class="row">
+        <div class="col-sm-2 col-sm-2" style="background-color: red">
+            |
+        </div>
+        <div class="col-sm-10 col-sm-10" style="background-color: blue">
+            &nbsp;
+        </div>
+    </div>
+    <!-- /ko -->
+    <!-- ko foreach: beginning -->
+    <div class="row">
+        <div class="col-sm-2 col-sm-2" style="background-color: blue">
+            |
+        </div>
+        <div class="col-sm-10 col-sm-10" style="background-color: red">
+            &nbsp;
+        </div>
+    </div>
+    <!-- /ko -->
+</div>

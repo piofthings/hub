@@ -48,7 +48,8 @@ export class CrossRouter extends EventEmitter {
     //  app.use('/api', nav.route);
     public route = (req: any, res: express.Response, next: any) => {
         this.nxt = next;
-        //console.log("crossRouter: Requested Url:" + req.url);
+        console.log("crossRouter: Requested Url:" + req.url);
+        
         try {
             this.router.parse(req.url, [req, res, next]);
         }

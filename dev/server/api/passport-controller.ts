@@ -141,7 +141,7 @@ export class PassportLocalController extends BaseController {
     }
 
     public getLogin = (req, res, next) => {
-        //console.log("Getting Login: " + JSON.stringify({ user: req.user }));
+        console.log("Getting Login: " + JSON.stringify({ user: req.user }));
 
         res.send({ user: req.user });
     }

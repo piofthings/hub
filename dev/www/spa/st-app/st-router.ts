@@ -116,7 +116,7 @@ class Router {
 
     private activateCrossroads = () => {
         Historyjs.Adapter.bind(window, "statechange", this.historyStateChanged);
-        (<any>crossroads).normalizeFn = crossroads.NORM_AS_OBJECT; 
+        (<any>crossroads).normalizeFn = crossroads.NORM_AS_OBJECT;
     }
 
 }

@@ -24,9 +24,10 @@
     "requirejs": "^2.2.0",
     "text": "^2.0.15",
     "history.js": "history#^1.8.0",
-    "gnb": "^0.1.5",
+    "gnb": "^0.1.9",
     "rsvp.js": "rsvp#^3.2.1",
     "r.js": "^2.3.2",
-    "amplify": "^1.1.2"
+    "amplify": "^1.1.2",
+    "font-awesome": "fontawesome#^4.7.0"
   }
 }

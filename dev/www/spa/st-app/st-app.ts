@@ -20,19 +20,11 @@ export class app {
     private registerMenuItems = () => {
         //console.log("Registering menu items.");
         this.router.leftMenuItems.push(MenuItem.factory('&#xf015;', '/', 'nav-header nav-menu-item', 'fa', false, []));
-        this.router.leftMenuItems.push(MenuItem.factory('Blog', '/blog', 'nav-menu-item', '', false, []));
-        this.router.leftMenuItems.push(MenuItem.factory('Reflection', '/feed', 'nav-menu-item', '', true, ['owner']));
     }
 
     private registerComponents = () => {
         this.registerComponent("home", "./ui/pages/home/home");
-        this.registerComponent("blog", "./ui/pages/blog/blog");
-        this.registerComponent("login", "./ui/pages/login/login");
-        this.registerComponent("profile", "./ui/pages/profile/profile");
-        this.registerComponent("verify", "./ui/pages/verify/verify");
-        this.registerComponent("register", "./ui/pages/register/register");
-        this.registerComponent("reflections", "./ui/pages/reflections/reflections");
-        this.registerComponent("invitation", "./ui/pages/invitation/invitation");
+        this.registerComponent("room", "./ui/components/room/room");
 
         this.registerComponent("print-preview", "./ui/print-preview/print-preview");
         this.registerComponent("st-nav-menu", "./st-ui/components/st-nav-menu/st-nav-menu");

@@ -16,14 +16,15 @@ export class DeviceController extends BaseController
         this["Device:path"] = "/device/:deviceid:";
     }
 
-    postDevice = (req: Express.Request, res: Express.Response, next, params)=>{
+    postDevice = (req: Express.Request, res: Express.Response, next, params) => {
         let testMessage = new HubMessage<string>();
+        console.log(req.body);
         testMessage.topic = "/Relays";
-        testMessage.payload = "{ switch :  'on' }";
-        this.mosquitto.send<string>(testMessage, (something, something2) => {
-            console.log("something = " + something);
-            console.log("something-value = " + JSON.stringify(something2));
+        testMessage.payload = JSON.stringify(req.body);
+        this.mosquitto.send<string>(testMessage, (error, payload) => {
+            console.log("error = " + error);
+            console.log("something-value = " + JSON.stringify(payload));
         });
+        res.status(200);
     }
-
 }

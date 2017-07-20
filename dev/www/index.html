@@ -1,49 +1,45 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>piofthings.net</title>
-    <link href="content/bootstrap-theme.min.css" rel="stylesheet"></link>
-    <link href="content/bootstrap.min.css" rel="stylesheet"></link>
+    <title>piothub.local</title>
+    <link href="libs/gnb/dist/gnb.css" rel="stylesheet"></link>
+    <link href="libs/font-awesome/css/font-awesome.min.css" rel="stylesheet"></link>
     <link href="content/Site.css" rel="stylesheet"></link>
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="/">
-                    <img src="images/piot-white.png" style="max-height:50px" class="navbar-brand" />
-                </a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="/">Home</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="body-content">
-        <div class="piot-header">
-            <div class="container">
-                <h1>Pi of things Hub</h1>
-                <p class="piot-h2 hidden-xs">Pi of things Hub to control all your home automation bits and bobs</p>
-            </div>
-        </div>
-        <div class="container" style="padding-top:50px">
-        </div>
-    </div>
-    <hr />
-    <footer class="container">
-        <p></p>
-        <p>piofthings.net. Page design inspiration from the <a href="https://pages.github.com">GitHub Pages</a> Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        <script data-main="/spa/st-app/st-boot" src="/libs/requirejs/require.js"></script>
 
+<body>
+
+    <body>
+        <div data-bind="component:{
+            name: 'st-nav-menu',
+            params: $data
+        }"></div>
+
+        <div class="body-content">
+            <div class="container center">
+                <h1>Hub of things!</h1>
+                <p class="hidden-xs">Pi of things Hub to control all your home automation bits and bobs</p>
+            </div>
+            <hr />
+        </div>
+        <div data-bind="component:
+            {
+                name: pageComponent,
+                params: $data
+            }">
+        </div>
+    </body>
+    <footer style="display: block">
+        <div class="full-width">
+            <div class="center nav nav-item-container">
+                <p>piofthings.net Designed by Sumit Maitra, MIT License.</p>
+            </div>
+        </div>
+        <script data-main="/spa/st-app/st-boot" src="/libs/requirejs/require.js"></script>
     </footer>
 </body>
+
 </html>

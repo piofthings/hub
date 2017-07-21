@@ -21,7 +21,8 @@ export class Config {
             {
                 this.currentSettings.verifyFromEmail = nconf.get('verifyFromEmail');
                 this.currentSettings.sparkPostApiKey = nconf.get('sparkPostApiKey');
-                this.currentSettings.mongodbUri = nconf.get('mongodbUri');
+                this.currentSettings.mongodbDataUri = nconf.get('mongodbDataUri');
+                this.currentSettings.mongodbMqttUri = nconf.get('mongodbMqttUri');
                 this.currentSettings.sessionSecret = nconf.get('sessionSecret');
                 this.currentSettings.azureStorageConnectionString = nconf.get('azureStorageConnectionString');
                 this.currentSettings.containerName = nconf.get('containerName');

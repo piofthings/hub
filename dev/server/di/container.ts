@@ -18,9 +18,10 @@ export class Container {
     private static config: Configuration;
     public static apiRouter: CrossRouter;
     public static webRouter: CrossRouter;
-    public static moscaServer: MoscaServer = new MoscaServer();
+    public static moscaServer: MoscaServer;
     public static inject = (configuration: Configuration, authenticator: PassportLocalAuthenticator, logger: any) => {
         Container.config = configuration;
+        Container.moscaServer = new MoscaServer(configuration);
         Container.moscaServer.start();
         Container.injectWebController(new HomeController(Container.config, authenticator, logger));
         Container.injectController(new PassportLocalController(Container.config, authenticator, logger));

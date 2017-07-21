@@ -1,7 +1,8 @@
 export class Configuration
 {
     public sparkPostApiKey: string;
-    public mongodbUri: string;
+    public mongodbDataUri: string;
+    public mongodbMqttUri: string;
     public sessionSecret: string;
     public verifyFromEmail: string;
     public key: string;

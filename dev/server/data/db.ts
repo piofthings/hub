@@ -17,7 +17,7 @@ export class db {
 
 	public getConnection = () => {
 		if (mongoose.connection.readyState === 0)
-			mongoose.connect(this._configuration.mongodbUri, { server: { auto_reconnect: true } });
+			mongoose.connect(this._configuration.mongodbDataUri, { server: { auto_reconnect: true } });
 		return mongoose.connection;
 	}
 

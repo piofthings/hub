@@ -6,11 +6,10 @@ import { PassportLocalAuthenticator } from "../services/passport-local/passport-
 import { MoscaServer } from "../mqtt/mosca-server";
 import { HubMessage } from "../data/hub-message";
 
-export class DeviceController extends BaseController
-{
+export class DeviceController extends BaseController {
     private mosquitto : MoscaServer;
-    constructor(configuration: Configuration, auther: PassportLocalAuthenticator, logger: any, moscaServer: MoscaServer)
-    {
+    
+    constructor(configuration: Configuration, auther: PassportLocalAuthenticator, logger: any, moscaServer: MoscaServer) {
         super(auther, logger);
         this.mosquitto = moscaServer;
         this["Device:path"] = "/device/:deviceid:";

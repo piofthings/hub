@@ -1,15 +1,17 @@
 import { HubMessage } from "../data/hub-message";
+import { Configuration } from "../services/settings/config-model";
 
 var mosca = require('mosca');
 
 export class MoscaServer {
-
+    private config : Configuration;
     private server;
-    constructor() {
+    constructor(config: Configuration) {
+        this.config = config;
         var ascoltatore = {
             //using ascoltatore
             type: 'mongo',
-            url: 'mongodb://devmongodb:27017/mqtt',
+            url: config.mongodbMqttUri,
             pubsubCollection: 'ascoltatori',
             mongo: {}
         };

@@ -56,7 +56,7 @@ export class main {
                 app.use(bodyParser.urlencoded({ extended: false }));
 
                 // Connect mongoose
-                mongoose.createConnection(config.mongodbUri, (err) => {
+                mongoose.createConnection(config.mongodbDataUri, (err) => {
                     if (err) {
                         //console.log('Could not connect to mongodb on localhost. Ensure that you have mongodb running on localhost and mongodb accepts connections on standard ports!');
                         this.logger.info({ error: err }, 'Connect error');
@@ -72,7 +72,7 @@ export class main {
                     secret: config.sessionSecret,
                     saveUninitialized: true,
                     resave: true,
-                    store: new MongoStore({ url: config.mongodbUri })
+                    store: new MongoStore({ url: config.mongodbDataUri })
                 }));
 
                 // Configure passport middleware

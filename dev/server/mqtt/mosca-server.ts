@@ -8,13 +8,16 @@ export class MoscaServer {
     private server;
     constructor(config: Configuration) {
         this.config = config;
-        var ascoltatore = {
-            //using ascoltatore
-            type: 'mongo',
-            url: config.mongodbMqttUri,
-            pubsubCollection: 'ascoltatori',
-            mongo: {}
-        };
+        // var ascoltatore = {
+        //     //using ascoltatore
+        //     type: 'mongo',
+        //     url: config.mongodbMqttUri,
+        //     pubsubCollection: 'ascoltatori',
+        //     mongo: {}
+        // };
+
+        var ascoltatore = config.mqttSessionConfig;
+        ascoltatore.redis = require('redis');
 
         var settings = {
             port: 1883,

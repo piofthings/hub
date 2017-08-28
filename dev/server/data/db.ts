@@ -1,5 +1,5 @@
 // var config = require('../settings/config');
-import * as mongoose from "mongoose";
+//import * as mongoose from "mongoose";
 import { Configuration } from "../services/settings/config-model";
 
 export class db {

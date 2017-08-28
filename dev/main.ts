@@ -1,5 +1,4 @@
 import * as nconf from "nconf";
-import * as mongoose from "mongoose";
 import { Configuration } from "./server/services/settings/config-model";
 import { Config } from "./server/services/settings/config";
 import { Container } from "./server/di/container";
@@ -54,25 +53,27 @@ export class main {
 
                 app.use(bodyParser.json());
                 app.use(bodyParser.urlencoded({ extended: false }));
-
-                // Connect mongoose
-                mongoose.createConnection(config.mongodbDataUri, (err) => {
-                    if (err) {
-                        //console.log('Could not connect to mongodb on localhost. Ensure that you have mongodb running on localhost and mongodb accepts connections on standard ports!');
-                        this.logger.info({ error: err }, 'Connect error');
-                    }
-                });
                 app.use(bodyParser.json());
                 app.use(bodyParser.urlencoded({ extended: false }));
-                var MongoStore = require('connect-mongo')(session);
+
+
+                const KnexSessionStore = require('connect-session-knex')(session);
+
+                const Knex = require('knex');
+                const knex = Knex(config.webSessionConfig);
+
+                const store = new KnexSessionStore({
+                    knex: knex,
+                    tablename: 'sessions' // optional. Defaults to 'sessions'
+                });
+
+
                 app.use(session({
-                    cookie: {
-                        maxAge: 3600000
-                    },
                     secret: config.sessionSecret,
-                    saveUninitialized: true,
-                    resave: true,
-                    store: new MongoStore({ url: config.mongodbDataUri })
+                    cookie: {
+                        maxAge: 10000 // ten seconds, for testing
+                    },
+                    store: store
                 }));
 
                 // Configure passport middleware

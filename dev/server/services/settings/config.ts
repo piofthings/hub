@@ -19,11 +19,22 @@ export class Config {
             nconf.file('./webconfig.json');
             nconf.load((data) =>
             {
+                console.log("Loaded");
                 this.currentSettings.verifyFromEmail = nconf.get('verifyFromEmail');
+                console.log("verifyFromEmail");
+
                 this.currentSettings.sparkPostApiKey = nconf.get('sparkPostApiKey');
-                this.currentSettings.webSessionConfig = JSON.parse(nconf.get('webSessionConfig'));
+                console.log("sparkPostApiKey");
+
                 this.currentSettings.mqttSessionConfig = JSON.parse(nconf.get('mqttSessionConfig'));
+                console.log("mqttSessionConfig");
+
+                this.currentSettings.webSessionConfig = JSON.parse(nconf.get('webSessionConfig'));
+                console.log("webSessionConfig");
+                
                 this.currentSettings.sessionSecret = nconf.get('sessionSecret');
+                console.log("sessionSecret");
+
                 this.currentSettings.mongodbDataUri = '';
                 this.currentSettings.azureStorageConnectionString = nconf.get('azureStorageConnectionString');
                 this.currentSettings.containerName = nconf.get('containerName');

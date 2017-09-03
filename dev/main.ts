@@ -5,10 +5,14 @@ import { Container } from "./server/di/container";
 import { CrossRouter } from "./server/services/routing/cross-router";
 import { PassportLocalAuthenticator } from "./server/services/passport-local/passport-local-authenticator";
 import { SpaEngine } from "./spa-engine";
-
+import { PassportLocalMassive } from "./server/passport-local-massive/passport-local-massive";
+import { Repository } from "./server/data/pg/repository";
+import * as passport from "passport";
 import * as express from "express";
 import * as fs from "fs";
 import * as bunyan from "bunyan";
+import { Strategy, VerifyFunctionWithRequest, IVerifyOptions } from "passport-local";
+import { MassiveSessionStore } from "./server/session-store/massive-session-store";
 
 var multer = require('multer');
 var favicon = require('serve-favicon');
@@ -18,12 +22,11 @@ var bodyParser = require('body-parser');
 var app: express.Application = express();
 var http = require('http');
 var https = require('https');
-var passport = require('passport');
 
 export class main {
     logger: bunyan;
     config: Config;
-
+    repo: Repository;
     constructor() {
         this.logger = bunyan.createLogger({
             name: 'piothub.local',
@@ -44,121 +47,140 @@ export class main {
 
     public start = () => {
         try {
-            this.config.load((config: Configuration) => {
+            this.config.load((configuration: Configuration) => {
+                Repository.init(configuration, () => {
 
-                Container.apiRouter = new CrossRouter("/api");
-                Container.webRouter = new CrossRouter();
-                Container.inject(config, <PassportLocalAuthenticator>null, this.logger);
-                console.log("Container injected");
+                    Container.apiRouter = new CrossRouter("/api");
+                    Container.webRouter = new CrossRouter();
+                    Container.inject(configuration, <PassportLocalAuthenticator>null, this.logger);
+                    console.log("Container injected");
 
-                app.use(bodyParser.json());
-                app.use(bodyParser.urlencoded({ extended: false }));
-                app.use(bodyParser.json());
-                app.use(bodyParser.urlencoded({ extended: false }));
-
-
-                const KnexSessionStore = require('connect-session-knex')(session);
-
-                const Knex = require('knex');
-                const knex = Knex(config.webSessionConfig);
-
-                const store = new KnexSessionStore({
-                    knex: knex,
-                    tablename: 'sessions' // optional. Defaults to 'sessions'
-                });
+                    app.use(bodyParser.json());
+                    app.use(bodyParser.urlencoded({ extended: false }));
+                    app.use(bodyParser.json());
+                    app.use(bodyParser.urlencoded({ extended: false }));
 
 
-                app.use(session({
-                    secret: config.sessionSecret,
-                    cookie: {
-                        maxAge: 10000 // ten seconds, for testing
-                    },
-                    store: store
-                }));
+                    let massiveSessionStore = new MassiveSessionStore({}, configuration);
+                    // const KnexSessionStore = require('connect-session-knex')(session);
 
-                // Configure passport middleware
-                // let bootPassport = new PassportLocalAuthenticator(app, passport, config);
-                // bootPassport.init();
-                app.use(passport.initialize());
-                app.use(passport.session());
+                    // const Knex = require('knex');
+                    // const knex = Knex(configuration.webSessionConfig);
 
-                // Configure passport-local to use account model for authentication
-                var Account = require('./server/data/account');
-                passport.use(Account.createStrategy());
-                passport.serializeUser(Account.serializeUser());
-                passport.deserializeUser(Account.deserializeUser());
+                    // const store = new KnexSessionStore({
+                    //     knex: knex,
+                    //     tablename: 'sessions' // optional. Defaults to 'sessions'
+                    // });
 
-                app.use('/', (req: any, res, next) => {
-                    req.logger = this.logger;
-                    console.log("Request Path:" + req.path);
-                    next();
-                });
 
-                // Register routes
-                app.use('/.well-known', express.static(__dirname + '/www/.well-known')); //static route for Letsncrypt validation
-                app.use(express.static(__dirname + '/www')); // All static stuff from /app/wwww
+                    app.use(session({
+                        cookie: {
+                            maxAge: 3600000
+                        },
+                        secret: configuration.sessionSecret,
+                        saveUninitialized: true,
+                        resave: true,
+                        store: massiveSessionStore
+                    }));
 
-                // SpaEngine - Handle server side requests by rendering the same index.html pages
-                // for all routes
+                    // Configure passport middleware
+                    // let bootPassport = new PassportLocalAuthenticator(app, passport, config);
+                    // bootPassport.init();
+                    app.use(passport.initialize());
+                    app.use(passport.session());
 
-                var spaEngine = new SpaEngine(config);
-                app.set('views', __dirname + '/www');
-                app.set("view options", { layout: false });
-                app.engine('html', spaEngine.renderer);
-                app.set('view engine', 'html');
-                // All HTTP API requests
-                app.use('/api', Container.apiRouter.route);
-                // All content requests that are not in static
-                app.use('/', Container.webRouter.route);
+                    // Configure passport-local to use account model for authentication
+                    // var Account = require('./server/data/account');
+                    // passport.use(Account.createStrategy());
+                    // passport.serializeUser(Account.serializeUser());
+                    // passport.deserializeUser(Account.deserializeUser());
+                    // passport.use(Account.createStrategy());
 
-                // catch 404 and forward to error handler
-                app.use(function(req: Express.Request, res: Express.Response, next: any) {
-                    var err = new Error('Not Found');
-                    err.message = "404";
-                    next(err.message + ": Unhandled Error");
-                });
+// TEMP Comment
+                    // let passportLocalMassiveStrategy = new PassportLocalMassive({
+                    //     usernameField: 'email',
+                    //     passwordField: 'pass'
+                    // }, (req: express.Request, username: string, password: string, done: (error: any, user?: any, options?: IVerifyOptions) => void): void => {
+                    //
+                    // },
+                    //     configuration);
+                    // passport.use(passportLocalMassiveStrategy);
+                    // passport.serializeUser(passportLocalMassiveStrategy.serializeUser);
+                    // passport.deserializeUser(passportLocalMassiveStrategy.deserializeUser);
 
-                // catch 404 and forward to error handler
-                app.use(function(req, res, next) {
-                    console.log("404 on :" + req.path);
-                    var err = new Error('Not Found');
-                    err['status'] = 404;
-                    err['message'] = "Request path  : "+ req.path;
-                    next(err);
-                });
+                    app.use('/', (req: any, res, next) => {
+                        req.logger = this.logger;
+                        console.log("Request Path:" + req.path);
+                        next();
+                    });
 
-                // error handlers
-                // development error handler
-                // will print stacktrace
-                if (app.get('env') === 'development') {
+                    // Register routes
+                    app.use('/.well-known', express.static(__dirname + '/www/.well-known')); //static route for Letsncrypt validation
+                    app.use(express.static(__dirname + '/www')); // All static stuff from /app/wwww
+
+                    // SpaEngine - Handle server side requests by rendering the same index.html pages
+                    // for all routes
+
+                    var spaEngine = new SpaEngine(configuration);
+                    app.set('views', __dirname + '/www');
+                    app.set("view options", { layout: false });
+                    app.engine('html', spaEngine.renderer);
+                    app.set('view engine', 'html');
+                    // All HTTP API requests
+                    app.use('/api', Container.apiRouter.route);
+                    // All content requests that are not in static
+                    app.use('/', Container.webRouter.route);
+
+                    // catch 404 and forward to error handler
+                    app.use(function(req: Express.Request, res: Express.Response, next: any) {
+                        var err = new Error('Not Found');
+                        err.message = "404";
+                        next(err.message + ": Unhandled Error");
+                    });
+
+                    // catch 404 and forward to error handler
+                    app.use(function(req, res, next) {
+                        console.log("404 on :" + req.path);
+                        var err = new Error('Not Found');
+                        err['status'] = 404;
+                        err['message'] = "Request path  : " + req.path;
+                        next(err);
+                    });
+
+                    // error handlers
+                    // development error handler
+                    // will print stacktrace
+                    if (app.get('env') === 'development') {
+                        app.use((err: any, req: express.Request, res: express.Response, next: any) => {
+                            res.status(err.status || 500);
+                            next(err.status || 500 + ": Unhandled Error :" + JSON.stringify(err));
+                        });
+                    }
+
+                    // production error handler
+                    // no stacktraces leaked to user
                     app.use((err: any, req: express.Request, res: express.Response, next: any) => {
                         res.status(err.status || 500);
-                        next(err.status || 500 + ": Unhandled Error :" + JSON.stringify(err));
+                        console.log("404 on :" + req.path);
+
+                        next(err.status || 500 + ": Unhandled Error : PROD:" + JSON.stringify(err));
+                        this.logger.error(err);
                     });
-                }
 
-                // production error handler
-                // no stacktraces leaked to user
-                app.use((err: any, req: express.Request, res: express.Response, next: any) => {
-                    res.status(err.status || 500);
-                    console.log("404 on :" + req.path);
+                    var pkg = require('./package.json');
+                    var httpServer = http.createServer(app);
+                    httpServer.listen(3002, (): void => {
+                        console.log(pkg.name, 'listening on port ', httpServer.address().port);
+                    });
 
-                    next(err.status || 500 + ": Unhandled Error : PROD:" + JSON.stringify(err));
-                    this.logger.error(err);
                 });
-
-                var pkg = require('./package.json');
-                var httpServer = http.createServer(app);
-                httpServer.listen(3002, (): void => {
-                    console.log(pkg.name, 'listening on port ', httpServer.address().port);
-                });
-
             });
 
         }
         catch (err) {
             "Outer catch:" + console.error(err);
         }
+
     }
 }
 

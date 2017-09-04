@@ -1,3 +1,4 @@
+import * as crypto from 'crypto';
 import * as passport from "passport";
 import { Repository } from "../data/pg/repository";
 import { Configuration } from "../services/settings/config-model";

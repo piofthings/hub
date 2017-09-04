@@ -5,7 +5,7 @@ import { Container } from "./server/di/container";
 import { CrossRouter } from "./server/services/routing/cross-router";
 import { PassportLocalAuthenticator } from "./server/services/passport-local/passport-local-authenticator";
 import { SpaEngine } from "./spa-engine";
-import { PassportLocalMassive } from "./server/passport-local-massive/passport-local-massive";
+import { PassportLocalMassive } from "./server/passport-local/passport-local-massive";
 import { Repository } from "./server/data/pg/repository";
 import * as passport from "passport";
 import * as express from "express";
@@ -60,18 +60,7 @@ export class main {
                     app.use(bodyParser.json());
                     app.use(bodyParser.urlencoded({ extended: false }));
 
-
                     let massiveSessionStore = new MassiveSessionStore({}, configuration);
-                    // const KnexSessionStore = require('connect-session-knex')(session);
-
-                    // const Knex = require('knex');
-                    // const knex = Knex(configuration.webSessionConfig);
-
-                    // const store = new KnexSessionStore({
-                    //     knex: knex,
-                    //     tablename: 'sessions' // optional. Defaults to 'sessions'
-                    // });
-
 
                     app.use(session({
                         cookie: {

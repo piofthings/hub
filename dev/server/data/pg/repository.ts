@@ -1,6 +1,5 @@
 import * as massive from "massive";
 import { Configuration } from "../../services/settings/config-model";
-//import { User } from "./user";
 
 export class Repository
 {

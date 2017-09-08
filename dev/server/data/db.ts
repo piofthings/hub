@@ -7,7 +7,7 @@ export class db {
 	public Account = require("../data/account");
 	public Profile = require("../data/profile");
 	public Content = require("../data/content");
-	public FeedItem = require("./feed-item");
+	// public FeedItem = require("./feed-item");
 	public Invite = require("./invite")
 
 

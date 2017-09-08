@@ -5,7 +5,7 @@ import { Container } from "./server/di/container";
 import { CrossRouter } from "./server/services/routing/cross-router";
 import { PassportLocalAuthenticator } from "./server/services/passport-local/passport-local-authenticator";
 import { SpaEngine } from "./spa-engine";
-import { PassportLocalMassive } from "./server/passport-local/passport-local-massive";
+import { PassportLocalMassive } from "./server/passport-local/massive-strategy";
 import { Repository } from "./server/data/pg/repository";
 import * as passport from "passport";
 import * as express from "express";
@@ -73,29 +73,17 @@ export class main {
                     }));
 
                     // Configure passport middleware
-                    // let bootPassport = new PassportLocalAuthenticator(app, passport, config);
-                    // bootPassport.init();
                     app.use(passport.initialize());
                     app.use(passport.session());
 
                     // Configure passport-local to use account model for authentication
-                    // var Account = require('./server/data/account');
-                    // passport.use(Account.createStrategy());
-                    // passport.serializeUser(Account.serializeUser());
-                    // passport.deserializeUser(Account.deserializeUser());
-                    // passport.use(Account.createStrategy());
-
-// TEMP Comment
-                    // let passportLocalMassiveStrategy = new PassportLocalMassive({
-                    //     usernameField: 'email',
-                    //     passwordField: 'pass'
-                    // }, (req: express.Request, username: string, password: string, done: (error: any, user?: any, options?: IVerifyOptions) => void): void => {
-                    //
-                    // },
-                    //     configuration);
-                    // passport.use(passportLocalMassiveStrategy);
-                    // passport.serializeUser(passportLocalMassiveStrategy.serializeUser);
-                    // passport.deserializeUser(passportLocalMassiveStrategy.deserializeUser);
+                    let passportLocalMassiveStrategy = new PassportLocalMassive({
+                        usernameField: 'email',
+                        passwordField: 'pass'
+                    }, configuration);
+                    passport.use(passportLocalMassiveStrategy);
+                    passport.serializeUser(passportLocalMassiveStrategy.serializeUser);
+                    passport.deserializeUser(passportLocalMassiveStrategy.deserializeUser);
 
                     app.use('/', (req: any, res, next) => {
                         req.logger = this.logger;

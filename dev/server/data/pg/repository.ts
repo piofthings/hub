@@ -1,9 +1,10 @@
 import * as massive from "massive";
 import { Configuration } from "../../services/settings/config-model";
+//import "massive-mapping";
 
 export class Repository
 {
-    private static db: massive.Database;
+    private static db: massive.Database | DatabaseEx;
 
     public static init(config: Configuration, callback: ()=>void){
         massive(config.webSessionConfig.connection).then((db) => {
@@ -17,5 +18,13 @@ export class Repository
 
     public static getDb = () : massive.Database =>{
         return Repository.db;
+    }
+
+    public static accounts = () => {
+        return (<DatabaseEx>Repository.db).accounts;
+    }
+
+    public static sessions = () => {
+        return (<DatabaseEx>Repository.db).sessions_massive;
     }
 }

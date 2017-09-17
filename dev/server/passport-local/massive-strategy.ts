@@ -13,18 +13,18 @@ export class PassportLocalMassive extends Strategy
     private tableName: string = "accounts";
     public db: Database;
 
-    constructor(userPassFields: any, config)  {
+    constructor(userPassFields: any, config: Configuration)  {
         super(userPassFields, (req: express.Request, username: string, password: string, done: (error: any, user?: any, options?: IVerifyOptions) => void): void => {
-
+            this.authenticate(username, password);
         });
         this.createSessionTable(this.tableName);
     }
 
     private createSessionTable = (tableName: string) => {
-        console.log("Checking for session table:"  + tableName);
+        console.log("Checking for accounts table:"  + tableName);
         Repository.getDb().run("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
         .then((result: any)=>{
-            console.log("Session Table: " + JSON.stringify(result));
+            console.log("Accounts Table: " + JSON.stringify(result));
 
             if(result.length > 0 && result[0].exists == false) {
                 Repository.getDb().run(`CREATE TABLE
@@ -73,7 +73,7 @@ export class PassportLocalMassive extends Strategy
 
     public serializeUser = (user: User, done)=>{
         console.debug("serialize ", user);
-        done(null, user.user_id);
+        done(null, user.id);
     }
 
     public login = (username, password, done) => {

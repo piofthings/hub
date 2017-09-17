@@ -32,14 +32,14 @@ export class MassiveSessionStore extends Store
         this.createSessionTable(this.tableName);
     }
 
-    private createSessionTable = (tableName: string) => {
+    private createSessionTable = (tableName: string) : Promise<Object[]>=> {
         console.log("Checking for session table:"  + tableName);
-        Repository.getDb().run("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
+        return Repository.getDb().run("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
         .then((result: any)=>{
             console.log("Session Table: " + JSON.stringify(result));
 
             if(result.length > 0 && result[0].exists == false) {
-                Repository.getDb().run(`CREATE TABLE public.${tableName} (sid character varying(255) NOT NULL, sess json NOT NULL, expired timestamp with time zone NOT NULL, CONSTRAINT ${tableName}_pkey PRIMARY KEY (sid));`, [])
+                return Repository.getDb().run(`CREATE TABLE public.${tableName} (sid character varying(255) NOT NULL, sess json NOT NULL, expired timestamp with time zone NOT NULL, CONSTRAINT ${tableName}_pkey PRIMARY KEY (sid));`, [])
                 .then( create =>{
                     console.log("Session Table created: " + JSON.stringify(create));
                     return create;
@@ -47,7 +47,7 @@ export class MassiveSessionStore extends Store
                 .catch( error =>  {
                     console.log("ERROR CREATING TABLE:" + JSON.stringify(error));
                     return null;
-                })
+                });
             }
             return result;
         })

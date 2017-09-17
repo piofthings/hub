@@ -1,5 +1,10 @@
+
 interface User {
-    user_id: string;
-    name: string;
-    password: string;
+    id: string;
+    salt: string;
+    hash: string;
+    username: string;
+    isverified: string;
+    email: string;
+    verificationcode: string;
 }

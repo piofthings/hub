@@ -49,7 +49,11 @@ export class main {
         try {
             this.config.load((configuration: Configuration) => {
                 Repository.init(configuration, () => {
+                    Repository.accounts().
+                    count({}).then((result)=>{
+                        console.log("accounts has " + result);
 
+                    });
                     Container.apiRouter = new CrossRouter("/api");
                     Container.webRouter = new CrossRouter();
                     Container.inject(configuration, <PassportLocalAuthenticator>null, this.logger);

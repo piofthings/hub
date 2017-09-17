@@ -53,7 +53,7 @@ export class PassportLocalMassive extends Strategy
         });
     }
 
-    public authenticate = (username, password) => {
+    public authenticate (username, password){
         return true;
     }
 

@@ -17,11 +17,17 @@ export class MoscaServer {
         // };
 
         var ascoltatore = config.mqttSessionConfig;
+        console.log(JSON.stringify(ascoltatore));
         ascoltatore.redis = require('redis');
 
         var settings = {
             port: 1883,
-            backend: ascoltatore
+            backend: ascoltatore,
+            persistence: {
+                factory: mosca.persistence.Redis,
+                host: this.config.mqttSessionConfig.host,
+                port: this.config.mqttSessionConfig.port
+          }
         };
 
         this.server = new mosca.Server(settings);

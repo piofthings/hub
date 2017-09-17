@@ -29,7 +29,7 @@
     "express": "^4.15.3",
     "express-session": "^1.15.3",
     "massive": "^3.2.2",
-    "mosca": "^2.5.1",
+    "mosca": "^2.5.2",
     "multer": "^1.3.0",
     "nconf": "^0.8.4",
     "passport": "^0.3.2",

@@ -5,8 +5,8 @@ import { PassportLocalAuthenticator } from "../services/passport-local/passport-
 import { BaseController } from "../api/base-controller";
 
 import { HomeController } from "../api/home-controller";
-import { PassportLocalController } from "../api/passport-controller";
-import { ProfileController } from "../api/profile-controller";
+//import { PassportLocalController } from "../api/passport-controller";
+//import { ProfileController } from "../api/profile-controller";
 // import { FeedController } from "../api/feed-controller";
 import { DeviceController } from "../api/device-controller";
 import { CrossRouter } from "../services/routing/cross-router";
@@ -24,8 +24,8 @@ export class Container {
         Container.moscaServer = new MoscaServer(configuration);
         Container.moscaServer.start();
         Container.injectWebController(new HomeController(Container.config, authenticator, logger));
-        Container.injectController(new PassportLocalController(Container.config, authenticator, logger));
-        Container.injectController(new ProfileController(Container.config, authenticator, logger));
+        // Container.injectController(new PassportLocalController(Container.config, authenticator, logger));
+        // Container.injectController(new ProfileController(Container.config, authenticator, logger));
         // Container.injectController(new FeedController(Container.config, authenticator, logger));
         Container.injectController(new DeviceController(Container.config, authenticator, logger, Container.moscaServer));
     }

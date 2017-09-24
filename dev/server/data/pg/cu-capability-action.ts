@@ -1,5 +1,5 @@
-namespace piothub{
-    interface ControlUnitCapabilityAction {
+namespace PiotHub{
+    export interface ControlUnitCapabilityAction {
         id : number;
         ccId: number;
         name: string;

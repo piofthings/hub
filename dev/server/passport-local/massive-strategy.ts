@@ -71,7 +71,7 @@ export class PassportLocalMassive extends Strategy
       })
     }
 
-    public serializeUser = (user: User, done)=>{
+    public serializeUser = (user: MassiveStrategy.User, done)=>{
         console.debug("serialize ", user);
         done(null, user.id);
     }

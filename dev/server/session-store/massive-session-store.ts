@@ -10,7 +10,7 @@ import { Repository } from "../../server/data/pg/repository";
 export class MassiveSessionStore extends Store
 {
     private config: Configuration;
-    private tableName: string = 'sessions_massive';
+    private tableName: string = 'massive_sessions';
     private oneDay: number = 86400000;
 
     private getExpiry = (sess) : Date =>

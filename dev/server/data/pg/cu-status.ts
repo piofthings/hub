@@ -1,4 +1,4 @@
-namespace piothub {
+namespace PiotHub {
     enum ControlUnitStatus{
         unknown = 0,
         notregistered,

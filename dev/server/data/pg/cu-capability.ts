@@ -1,9 +1,8 @@
-namespace piothub {
-    interface ControlUnitCapability {
+namespace PiotHub {
+    export interface ControlUnitCapability {
         id: number;
-        cuId: number;
-        type: string;
-        typeId: string;
+        cuId: number; // FK
+        cmId: number; // FK
         gpioPin: number;
     }
 

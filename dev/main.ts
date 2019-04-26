@@ -36,7 +36,7 @@ export class main {
             },
             streams: [
                 {
-                    level: 'info',                  // loging level
+                    level: 'info',                  // logging level
                     path: __dirname + '/logs/foo.log'
                 }
             ]
@@ -91,7 +91,7 @@ export class main {
                     });
 
                     // Register routes
-                    app.use('/.well-known', express.static(__dirname + '/www/.well-known')); //static route for Letsncrypt validation
+                    app.use('/.well-known', express.static(__dirname + '/www/.well-known')); //static route for Letsencrypt validation
                     app.use(express.static(__dirname + '/www')); // All static stuff from /app/wwww
 
                     // SpaEngine - Handle server side requests by rendering the same index.html pages

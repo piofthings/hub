@@ -12,22 +12,22 @@ import { DeviceController } from "../api/device-controller";
 import { CrossRouter } from "../services/routing/cross-router";
 import { CrossRoute } from "../services/routing/cross-route";
 
-import { MoscaServer } from "../mqtt/mosca-server";
+import { AedesServer } from "../mqtt/aedes-server";
 
 export class Container {
     private static config: Configuration;
     public static apiRouter: CrossRouter;
     public static webRouter: CrossRouter;
-    public static moscaServer: MoscaServer;
+    public static AedesServer: AedesServer;
     public static inject = (configuration: Configuration, authenticator: PassportLocalAuthenticator, logger: any) => {
         Container.config = configuration;
-        Container.moscaServer = new MoscaServer(configuration);
-        Container.moscaServer.start();
+        Container.AedesServer = new AedesServer();
+        Container.AedesServer.start();
         Container.injectWebController(new HomeController(Container.config, authenticator, logger));
         // Container.injectController(new PassportLocalController(Container.config, authenticator, logger));
         // Container.injectController(new ProfileController(Container.config, authenticator, logger));
         // Container.injectController(new FeedController(Container.config, authenticator, logger));
-        Container.injectController(new DeviceController(Container.config, authenticator, logger, Container.moscaServer));
+        Container.injectController(new DeviceController(Container.config, authenticator, logger, Container.AedesServer));
     }
 
     private static injectController = (controller: BaseController) => {

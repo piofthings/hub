@@ -27,10 +27,10 @@ Container.injectController(new PassportLocalController(Container.config, authent
 The controller pattern roughly mimics the ASP.NET Web API attribute routing mechanism. Since we don't have function attributes in Typescript yet, we make use the dynamic nature of Javascript and use Keys to define routes in each controller, e.g.
 
 ```ts
-constructor(configuration: Configuration, auther: PassportLocalAuthenticator, logger: any, moscaServer: MoscaServer)
+constructor(configuration: Configuration, auther: PassportLocalAuthenticator, logger: any, AedesServer: AedesServer)
 {
     super(auther, logger);
-    this.mosquitto = moscaServer;
+    this.mosquitto = AedesServer;
     this["Device:path"] = "/device/:deviceid:";
 }
 ```

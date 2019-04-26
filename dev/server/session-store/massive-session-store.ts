@@ -152,7 +152,7 @@ export class MassiveSessionStore extends Store
         }
     }
 
-    public touch = (sessionId: string, session: string, callback: (err)=>void) => {
+    public touch = (sessionId: string, session: Express.SessionData, callback: (err)=>void) => {
         console.log("session: touch");
         Repository.getDb().run(`SELECT * FROM ${this.tableName} WHERE sid=$1`, [sessionId])
         .then(data => {

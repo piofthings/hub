@@ -159,7 +159,7 @@ export class MassiveSessionStore extends Store
             if(data.length > 0){
                 // update
                 let result = <MassiveSessionStore.Session>data[0];
-                Repository.getDb().run(`UPDATE ${this.tableName} SET session=$1, expired = $2 WHERE sid=$3` , [session, this.getExpiry(session), sessionId])
+                Repository.getDb().run(`UPDATE ${this.tableName} SET session=$1, expired = $2 WHERE sid=$3` , [JSON.stringify(session), this.getExpiry(session), sessionId])
                 .then( result => {
                     callback (null);
                 })
@@ -171,7 +171,7 @@ export class MassiveSessionStore extends Store
             else{
                 // insert
                 let result = <MassiveSessionStore.Session>data[0];
-                Repository.getDb().run(`INSERT INTO ${this.tableName} (sid, sess, expired) VALUES ($1, $2, $3)` , [sessionId, session, this.getExpiry(session)])
+                Repository.getDb().run(`INSERT INTO ${this.tableName} (sid, sess, expired) VALUES ($1, $2, $3)` , [sessionId, JSON.stringify(session), this.getExpiry(session)])
                 .then( result => {
                     callback (null);
                 })

@@ -12,7 +12,7 @@ export class AedesServer {
         this.broker = Server();
         this.server = net.createServer(this.broker.handle);
         this.server.listen(this.port, () => {
-          console.log('server listening on port', this.port)
+          console.log('MQTT: server listening on port', this.port)
       });
     }
 

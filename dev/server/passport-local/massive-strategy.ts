@@ -22,12 +22,12 @@ export class PassportLocalMassive extends Strategy
 
     private createSessionTable = (tableName: string) => {
         console.log("Checking for accounts table:"  + tableName);
-        Repository.getDb().run("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
+        Repository.getDb().query("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
         .then((result: any)=>{
             console.log("Accounts Table: " + JSON.stringify(result));
 
             if(result.length > 0 && result[0].exists == false) {
-                Repository.getDb().run(`CREATE TABLE
+                Repository.getDb().query(`CREATE TABLE
                     public.${tableName} (
                         id SERIAL NOT NULL,
                         salt varchar NOT NULL,
@@ -60,7 +60,7 @@ export class PassportLocalMassive extends Strategy
     public deserializeUser = (id, done) => {
       console.debug("deserialize ", id);
 
-      Repository.getDb().run("SELECT id, username, email, isverified FROM users " +
+      Repository.getDb().query("SELECT id, username, email, isverified FROM users " +
               "WHERE user_id = $1", [id])
       .then((user)=>{
         console.debug("deserializeUser ", user);
@@ -78,7 +78,7 @@ export class PassportLocalMassive extends Strategy
 
     public login = (username, password, done) => {
       console.debug("Login process:", username);
-      return Repository.getDb().run("SELECT user_id, user_name, user_email, user_role " +
+      return Repository.getDb().query("SELECT user_id, user_name, user_email, user_role " +
           "FROM users " +
           "WHERE user_email=$1 AND user_pass=$2", [username, password])
         .then((result)=> {

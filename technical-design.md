@@ -12,7 +12,7 @@
 
 <h2 id="thehub">The Hub</h2>
 
-The hub consists of a WebServer in NodeJS running the Mosca MQTT broker. Mosca uses Redis as its backing store.
+The hub consists of a WebServer in NodeJS running the Aedes MQTT broker. Aedes uses Redis as its backing store.
 
 It uses a PostgreSQL for data storage.
 

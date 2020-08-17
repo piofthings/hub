@@ -17,11 +17,11 @@ export class Repository
     }
 
     private static initializeDatabase = (callback)=>{
-        Repository.getDb().run("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", ['capabilities_master'])
+        Repository.getDb().query("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", ['capabilities_master'])
         .then((result: any)=>{
             console.log("control_units Table: " + JSON.stringify(result));
             if(result.length > 0 && result[0].exists == false) {
-                Repository.getDb().run(`CREATE TABLE
+                Repository.getDb().query(`CREATE TABLE
                     public.capabilities_master (
                         id BIGSERIAL NOT NULL,
                         name varchar,
@@ -40,12 +40,12 @@ export class Repository
         .then((data) => {
             let tableName = 'control_units';
 
-            Repository.getDb().run("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
+            Repository.getDb().query("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
             .then((result: any)=>{
                 console.log("control_units Table: " + JSON.stringify(result));
 
                 if(result.length > 0 && result[0].exists == false) {
-                    Repository.getDb().run(`CREATE TABLE
+                    Repository.getDb().query(`CREATE TABLE
                         public.${tableName} (
                             id BIGSERIAL NOT NULL,
                             deviceId BIGINT,
@@ -70,12 +70,12 @@ export class Repository
         })
         .then((data)=>{
             let tableName = 'cu_capabilities';
-            Repository.getDb().run("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
+            Repository.getDb().query("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
             .then((result: any)=>{
                 console.log(`${tableName} Table: ` + JSON.stringify(result));
 
                 if(result.length > 0 && result[0].exists == false) {
-                    Repository.getDb().run(`CREATE TABLE
+                    Repository.getDb().query(`CREATE TABLE
                         public.${tableName} (
                             id BIGSERIAL NOT NULL,
                             cuId BIGINT references control_units(id),
@@ -100,12 +100,12 @@ export class Repository
         })
         .then((data)=>{
             let tableName = 'cu_capability_actions';
-            Repository.getDb().run("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
+            Repository.getDb().query("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
             .then((result: any)=>{
                 console.log("control_units Table: " + JSON.stringify(result));
 
                 if(result.length > 0 && result[0].exists == false) {
-                    Repository.getDb().run(`CREATE TABLE
+                    Repository.getDb().query(`CREATE TABLE
                         public.${tableName} (
                             id BIGSERIAL NOT NULL,
                             ccId BIGINT references cu_capabilities(id),
@@ -130,12 +130,12 @@ export class Repository
         })
         .then((data)=>{
             let tableName = 'cu_ca_states';
-            Repository.getDb().run("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
+            Repository.getDb().query("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
             .then((result: any)=>{
                 console.log("control_units Table: " + JSON.stringify(result));
 
                 if(result.length > 0 && result[0].exists == false) {
-                    Repository.getDb().run(`CREATE TABLE
+                    Repository.getDb().query(`CREATE TABLE
                         public.${tableName} (
                             id BIGSERIAL NOT NULL,
                             cuId BIGINT references control_units(id),

@@ -34,12 +34,12 @@ export class MassiveSessionStore extends Store
 
     private createSessionTable = (tableName: string) : Promise<Object[]>=> {
         console.log("Checking for session table:"  + tableName);
-        return Repository.getDb().run("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
+        return Repository.getDb().query("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
         .then((result: any)=>{
             console.log("Session Table: " + JSON.stringify(result));
 
             if(result.length > 0 && result[0].exists == false) {
-                return Repository.getDb().run(`CREATE TABLE public.${tableName} (sid character varying(255) NOT NULL, sess json NOT NULL, expired timestamp with time zone NOT NULL, CONSTRAINT ${tableName}_pkey PRIMARY KEY (sid));`, [])
+                return Repository.getDb().query(`CREATE TABLE public.${tableName} (sid character varying(255) NOT NULL, sess json NOT NULL, expired timestamp with time zone NOT NULL, CONSTRAINT ${tableName}_pkey PRIMARY KEY (sid));`, [])
                 .then( create =>{
                     console.log("Session Table created: " + JSON.stringify(create));
                     return create;
@@ -58,7 +58,7 @@ export class MassiveSessionStore extends Store
 
     public all = (callback: (err, data)=> void) => {
         console.log("session: all");
-        Repository.getDb().run(`SELECT * FROM public.${this.tableName};`, [])
+        Repository.getDb().query(`SELECT * FROM public.${this.tableName};`, [])
         .then((data)=>{
             callback(null, data);
         });
@@ -66,7 +66,7 @@ export class MassiveSessionStore extends Store
 
     public destroy = (sessionId: string, callback: (err, data)=> void) =>{
         console.log("session: destroy");
-        Repository.getDb().run(`DELETE FROM public.${this.tableName} WHERE sid=$1;`, [sessionId])
+        Repository.getDb().query(`DELETE FROM public.${this.tableName} WHERE sid=$1;`, [sessionId])
         .then((data)=>{
             callback(null, data);
         })
@@ -77,7 +77,7 @@ export class MassiveSessionStore extends Store
 
     public clear = (callback:(err, data)=>void) =>{
         console.log("session: clear");
-        Repository.getDb().run(`DELETE FROM public.${this.tableName}`, [])
+        Repository.getDb().query(`DELETE FROM public.${this.tableName}`, [])
         .then((data) => {
             callback(null, data);
         })
@@ -88,7 +88,7 @@ export class MassiveSessionStore extends Store
 
     public length = (callback:(err, data)=>void) => {
         console.log("session: clear");
-        Repository.getDb().run(`SELECT COUNT (*) FROM public.${this.tableName}`, [])
+        Repository.getDb().query(`SELECT COUNT (*) FROM public.${this.tableName}`, [])
         .then((data) => {
             callback(null, data);
         })
@@ -99,7 +99,7 @@ export class MassiveSessionStore extends Store
 
     public get = (sessionId: string, callback: (err, data) => void) => {
         console.log("session: get:" + sessionId);
-        Repository.getDb().run(`SELECT * FROM ${this.tableName} WHERE sid=$1`, [sessionId])
+        Repository.getDb().query(`SELECT * FROM ${this.tableName} WHERE sid=$1`, [sessionId])
         .then((data : Array<MassiveSessionStore.Session>) => {
             console.log(JSON.stringify(data));
             if(data.length > 0){
@@ -119,12 +119,12 @@ export class MassiveSessionStore extends Store
 
     public set = (sessionId: string, session: any, callback: (err, data)=> void) => {
         console.log(`session set: ${sessionId}` );
-        Repository.getDb().run(`SELECT * FROM ${this.tableName} WHERE sid=$1`, [sessionId])
+        Repository.getDb().query(`SELECT * FROM ${this.tableName} WHERE sid=$1`, [sessionId])
         .then(data => {
             if(data.length > 0){
                 // update
                 let result = <MassiveSessionStore.Session>data[0];
-                Repository.getDb().run(`UPDATE ${this.tableName} SET sess = $1 WHERE sid=$2` , [session, sessionId])
+                Repository.getDb().query(`UPDATE ${this.tableName} SET sess = $1 WHERE sid=$2` , [session, sessionId])
                 .then( result => {
                     callback (null, result);
                 })
@@ -137,7 +137,7 @@ export class MassiveSessionStore extends Store
             else{
                 // insert
                 let result = <MassiveSessionStore.Session>data[0];
-                Repository.getDb().run(`INSERT INTO ${this.tableName} (sid, sess, expired) VALUES ($1, $2, $3)` , [sessionId, session, this.getExpiry(session)])
+                Repository.getDb().query(`INSERT INTO ${this.tableName} (sid, sess, expired) VALUES ($1, $2, $3)` , [sessionId, session, this.getExpiry(session)])
                 .then( result => {
                     callback (null, result);
                 })
@@ -154,12 +154,12 @@ export class MassiveSessionStore extends Store
 
     public touch = (sessionId: string, session: Express.SessionData, callback: (err)=>void) => {
         console.log("session: touch");
-        Repository.getDb().run(`SELECT * FROM ${this.tableName} WHERE sid=$1`, [sessionId])
+        Repository.getDb().query(`SELECT * FROM ${this.tableName} WHERE sid=$1`, [sessionId])
         .then(data => {
             if(data.length > 0){
                 // update
                 let result = <MassiveSessionStore.Session>data[0];
-                Repository.getDb().run(`UPDATE ${this.tableName} SET session=$1, expired = $2 WHERE sid=$3` , [JSON.stringify(session), this.getExpiry(session), sessionId])
+                Repository.getDb().query(`UPDATE ${this.tableName} SET session=$1, expired = $2 WHERE sid=$3` , [JSON.stringify(session), this.getExpiry(session), sessionId])
                 .then( result => {
                     callback (null);
                 })
@@ -171,7 +171,7 @@ export class MassiveSessionStore extends Store
             else{
                 // insert
                 let result = <MassiveSessionStore.Session>data[0];
-                Repository.getDb().run(`INSERT INTO ${this.tableName} (sid, sess, expired) VALUES ($1, $2, $3)` , [sessionId, JSON.stringify(session), this.getExpiry(session)])
+                Repository.getDb().query(`INSERT INTO ${this.tableName} (sid, sess, expired) VALUES ($1, $2, $3)` , [sessionId, JSON.stringify(session), this.getExpiry(session)])
                 .then( result => {
                     callback (null);
                 })

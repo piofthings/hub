@@ -2,7 +2,7 @@ import { HubMessage } from "../data/hub-message";
 import { Configuration } from "../services/settings/config-model";
 import { Server, Client, AuthenticateError } from "aedes";
 import * as aedes from "aedes";
-import * as net from 'net';
+import * as net from "net";
 
 export class AedesServer {
     private server: net.Server;
@@ -22,7 +22,7 @@ export class AedesServer {
         this.broker.on('keepaliveTimeout', this.keepaliveTimeout);
         this.broker.on('publish', this.published);
 
-        console.log('Mosca server is up and running');
+        console.log('Aedes server is up and running');
     }
 
     private clientConnected = (client: Client) => {

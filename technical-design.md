@@ -21,9 +21,11 @@ It does not have any authentication at the moment; authentication will be built 
 Idea is for the ```Hub``` to be the main controller unit that is 'auto-discoverable' by the ```clients``` or ```nodes```.
 Each ```node``` on boot up tries to connect to ```hubofthings.local``` and on connection publishes its capabilities in terms of Control Units it is managing.
 
-**Control units** are typically one PiZero (or any compute module) running an instance of the MQTT ```client```. Since a Pi can control multiple items via GPIO port, a control unit must declare what it can do, when connecting to the MQTT broker, in this case the Hub.
+**Control units** are typically an ESP82xx or ESP32 (or any compute module like Pi Zero W) running an instance of the MQTT ```client```. Since an ESP82xx can control multiple items via GPIO ports, a control unit must declare what it can do, when connecting to the MQTT broker, in this case the Hub.
 
-A control unit need to support MQTT, https and the TCP/IP stack to be a part of the Hub's network.
+A control unit needs to support MQTT, https and the TCP/IP stack to be a part of the Hub's network. 
+
+A control unit could be running other open source firmwares like Tasmota. So our capabilities should be able to use Tasmota's capabilities definition if possible.
 
 **Control unit Capability (CC)** is the description of a single capability of the CU. A CU can have multiple capabilities at the same time, e.g. Drive Relays and provide Temperature or Light sensor reading etc. The maximum number of CCs is typically guided by maximum number of addressable GPIO pins or I2C functions.
 
@@ -40,7 +42,7 @@ TBD.
 A RaspberryPi can power 5v relays from its 5v pins and drive it through any of its GPIO ports.
 
 **_Warning_**    
-** What goes on the other side of the Relay is beyond the scope of this framework. If you are dealing with high voltage (110v/230v), high current, relays please be careful and take all safety measures that are standard while dealing with high voltage.**  
+__What goes on the other side of the Relay is beyond the scope of this framework. If you are dealing with high voltage (110v/230v), high current, relays please be careful and take all safety measures that are standard while dealing with high voltage.__  
 I am assuming you are using Relays to trip 3.3v-5v circuits ;-)
 
 #### CC Supported Actions  
@@ -92,7 +94,7 @@ When a CU is blacklisted it is informed of the decision and all future requests 
 
 ### Workflow
 
-#### Registration
+#### Registration (Automatic)
 1. ```hubofthings.local``` is online
 2. CU comes online and tries to connect to ```hubofthings.local```
 3. If connected, CU sends out a Registration message to the ```/Register``` channel and registers to listen to the ```/Register/[mac-address]``` channel.
@@ -100,6 +102,16 @@ When a CU is blacklisted it is informed of the decision and all future requests 
 5. When the user whitelists the CU (from the ```hubofthings.local``` site), the mqtt server sends out a message on the ```/Register/[mac-address]``` channel to the tell the CU that it is now whitelisted and it can communicate with the Hub. This payload also contains a security token that the CU must use for future requests.
 6. Once the the CU receives registration confirmation it registers to listen to ```/cu/[mac-address]```channel.
 7. When a CU fails to reach ```hubofthings.local``` it retries connection with an increasing time gap. A CU continues for 24 hours and then shuts itself down if it cannot reach ```hubofthings.local``` to register itself.
+
+#### Registration (Manual) 
+1. Before we roll out automated registrations on custom hardware we will need to implement manual registrations for Tasmota devices on our own network. This is because we need other features such as graphs and data storage sorted and get the software in a usable alpha state.   
+Recent developments like Zigbee and Zigbee2Mqtt implies we might have hardware that is easier to communicate without custom firmware so the hub should take advantage of these devices as well.
+2. Manual registration involves following features
+- Register CUs to Hub via MQTT Channels
+- Have CU page to turn it on and off and other features
+- Define CU Capabilities and actions per CU
+- Save CU Capability values like Power consumption
+
 
 #### Command exchange
 Initially commands are initiated from the Hub via the web interface only. There will be provision of CU to CU command exchange in the future so that devices like capacitive switch pHATs and other fancy input methods can be used to send commands to other CUs.
@@ -128,7 +140,7 @@ Accounts collection used by Passport (reserved for future use)
 Session data as used by Passport and ```express-session```
 
 #### control-unit
-Control units collection that stores the list of CUs that connected to the server
+Control units collection that stores the list of CUs that connected to the `hub`
 
  **id:** Unique identifier  
  **deviceId:** MAC address provided while Registering  

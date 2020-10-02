@@ -7,11 +7,11 @@ import { AedesServer } from "../mqtt/aedes-server";
 import { HubMessage } from "../data/hub-message";
 
 export class DeviceController extends BaseController {
-    private mosquitto : AedesServer;
+    private mqttBroker : AedesServer;
 
     constructor(configuration: Configuration, auther: PassportLocalAuthenticator, logger: any, AedesServer: AedesServer) {
         super(auther, logger);
-        this.mosquitto = AedesServer;
+        this.mqttBroker = AedesServer;
         this["Device:path"] = "/device/:deviceid:";
     }
 
@@ -20,7 +20,7 @@ export class DeviceController extends BaseController {
         console.log(req.body);
         testMessage.topic = "/Relays";
         testMessage.payload = JSON.stringify(req.body);
-        this.mosquitto.send<string>(testMessage, () => {
+        this.mqttBroker.send<string>(testMessage, () => {
             // console.log("error = " + error);
             // console.log("something-value = " + JSON.stringify(payload));
         });

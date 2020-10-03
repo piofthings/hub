@@ -45,7 +45,7 @@ export class main {
 
     }
 
-    public start = () => {
+    public start = async () => {
         try {
             let repository = new Repository();
             this.config.load(async (configuration: Configuration) => {
@@ -86,7 +86,7 @@ export class main {
                     passport.serializeUser(passportLocalMassiveStrategy.serializeUser);
                     passport.deserializeUser(passportLocalMassiveStrategy.deserializeUser);
 
-                    app.use('/', (req: any, res, next) => {
+                    app.use('/', (req: any, res, next) => {                        
                         req.logger = this.logger;
                         console.log("Request Path:" + req.path);
                         next();
@@ -163,4 +163,4 @@ export class main {
 }
 
 let application = new main();
-application.start();
+(async () => { await application.start(); })();

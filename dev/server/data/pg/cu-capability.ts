@@ -4,6 +4,9 @@ namespace PiotHub {
         cuId: number; // FK
         cmId: number; // FK
         gpioPin: number;
+        mqttHost: string;
+        mqttPort: number;
+        mqttTopic: string;
     }
 
 }

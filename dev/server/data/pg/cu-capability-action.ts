@@ -4,5 +4,6 @@ namespace PiotHub{
         ccId: number;
         name: string;
         deps: any;
+        cmd: string;
     }
 }

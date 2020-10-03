@@ -19,13 +19,15 @@ It uses a PostgreSQL for data storage.
 It does not have any authentication at the moment; authentication will be built on top of Passport.
 
 Idea is for the ```Hub``` to be the main controller unit that is 'auto-discoverable' by the ```clients``` or ```nodes```.
-Each ```node``` on boot up tries to connect to ```hubofthings.local``` and on connection publishes its capabilities in terms of Control Units it is managing.
+Each ```node``` on boot up tries to connect to ```hubofthings.local``` and on connection publishes its capabilities in terms of Control Units it is managing. With the advent of ESP83xx based Tasmota devices there will be some sort auto-discovery for these devices built in as well.
 
 **Control units** are typically an ESP82xx or ESP32 (or any compute module like Pi Zero W) running an instance of the MQTT ```client```. Since an ESP82xx can control multiple items via GPIO ports, a control unit must declare what it can do, when connecting to the MQTT broker, in this case the Hub.
 
 A control unit needs to support MQTT, https and the TCP/IP stack to be a part of the Hub's network. 
 
 A control unit could be running other open source firmwares like Tasmota. So our capabilities should be able to use Tasmota's capabilities definition if possible.
+
+Control units could be Zigbee based devices too via Zigbee to MQTT bridge based on CC2531 Zigbee repeaters. We like to be able to discover such devices and bring them under control.
 
 **Control unit Capability (CC)** is the description of a single capability of the CU. A CU can have multiple capabilities at the same time, e.g. Drive Relays and provide Temperature or Light sensor reading etc. The maximum number of CCs is typically guided by maximum number of addressable GPIO pins or I2C functions.
 
@@ -37,7 +39,7 @@ TBD.
 
 <h2 id="controlunits">Control Units</h2>  
 
-<h3 id="cc1">Control-unit Capability 1 (CC1) - The Relay Driver</h3>
+<h3 id="cc1">Control-unit Capability 1 (CC1) - The Switch</h3>
 
 A RaspberryPi can power 5v relays from its 5v pins and drive it through any of its GPIO ports.
 

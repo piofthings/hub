@@ -22,7 +22,7 @@ export class PassportLocalMassive extends Strategy
 
     private createSessionTable = (tableName: string) => {
         console.log("Checking for accounts table:"  + tableName);
-        Repository.getDb().query("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
+        Repository.getDb().query("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'smarthome' AND tablename = $1)", [tableName])
         .then((result: any)=>{
             console.log("Accounts Table: " + JSON.stringify(result));
 

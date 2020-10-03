@@ -47,8 +47,10 @@ export class main {
 
     public start = () => {
         try {
-            this.config.load((configuration: Configuration) => {
-                Repository.init(configuration, () => {
+            let repository = new Repository();
+            this.config.load(async (configuration: Configuration) => {
+                let initSuccess = await repository.init(configuration);
+                if (initSuccess) {
                     Container.apiRouter = new CrossRouter("/api");
                     Container.webRouter = new CrossRouter();
                     Container.inject(configuration, <PassportLocalAuthenticator>null, this.logger);
@@ -108,14 +110,14 @@ export class main {
                     app.use('/', Container.webRouter.route);
 
                     // catch 404 and forward to error handler
-                    app.use(function(req: Express.Request, res: Express.Response, next: any) {
+                    app.use(function (req: Express.Request, res: Express.Response, next: any) {
                         var err = new Error('Not Found');
                         err.message = "404";
                         next(err.message + ": Unhandled Error");
                     });
 
                     // catch 404 and forward to error handler
-                    app.use(function(req, res, next) {
+                    app.use(function (req, res, next) {
                         console.log("404 on :" + req.path);
                         var err = new Error('Not Found');
                         err['status'] = 404;
@@ -149,7 +151,7 @@ export class main {
                         console.log(pkg.name, 'listening on port ', httpServer.address().port);
                     });
 
-                });
+                }
             });
 
         }

@@ -34,7 +34,7 @@ export class MassiveSessionStore extends Store
 
     private createSessionTable = (tableName: string) : Promise<Object[]>=> {
         console.log("Checking for session table:"  + tableName);
-        return Repository.getDb().query("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = $1)", [tableName])
+        return Repository.getDb().query("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'smarthome' AND tablename = $1)", [tableName])
         .then((result: any)=>{
             console.log("Session Table: " + JSON.stringify(result));
 

@@ -35,7 +35,7 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pg": "^8.3.0",
-    "redis": "^2.8.0",
+    "redis": "^3.1.1",
     "scmp": "^2.0.0",
     "serve-favicon": "^2.5.0",
     "sparkpost": "^2.1.3"

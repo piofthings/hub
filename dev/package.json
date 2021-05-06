@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/piofthings/hub#readme",
   "dependencies": {
-    "aedes": "^0.38.0",
+    "aedes": "^0.42.1",
     "body-parser": "^1.18.3",
     "bunyan": "^1.8.12",
     "connect-mongo": "^3.2.0",
